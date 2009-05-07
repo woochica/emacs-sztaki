@@ -39,6 +39,16 @@
    sztaki-local-dictionary
    (caar sztaki-dictionary-alist)))
 
+(defun sztaki-change-dictionary (dict)
+  "Change to dictionary name DICT for SZTAKI."
+  (interactive
+   (list
+    (or (completing-read
+         "Use new dictionary (RET for current, SPC to complete): "
+         (mapcar 'car sztaki-dictionary-alist) nil t)
+        (sztaki-local-dictionary))))
+  (setq sztaki-local-dictionary dict))
+
 (defun sztaki-lookup-phrase (phrase)
   "Look up the PHRASE and echo responsed translation if any.
 
