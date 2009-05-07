@@ -1,7 +1,23 @@
 ;;; sztaki.el --- SZTAKI dictionary lookup for Emacs
 
-;;; Emacs extension to reach the services of the SZTAKI online dictionary.
-;;; http://szotar.sztaki.hu/
+;;; Commentary:
+;; 
+;; Emacs extension to reach the services of the SZTAKI online dictionary.
+;; http://szotar.sztaki.hu/
+;;
+;; Install:
+;;
+;; Put the following into your .emacs:
+;;
+;;   (add-to-list 'load-path "/path/to/emacs-sztaki")
+;;   (require 'sztaki)
+;;   (global-set-key (kbd "C-?") 'sztaki-lookup-phrase)
+;;   (sztaki-change-dictionary "EN:HU")
+
+;;; History:
+;; 
+
+;;; Code:
 
 (require 'w3m)
 
@@ -72,3 +88,5 @@ If called interactivly, look up word under the cursor."
     (message "SZTAKI (%s): %s" (sztaki-local-dictionary) match)))
 
 (provide 'sztaki)
+
+;;; sztaki.el ends here
