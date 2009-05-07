@@ -10,19 +10,19 @@
   "URL format for the SZTAKI dictionary web service.")
 
 (defconst sztaki-dictionary-alist
-  '(("EN⇒HU" . "ENG:HUN:EngHunDict")
-    ("HU⇒EN" . "HUN:ENG:EngHunDict")
-    ("DE⇒HU" . "GER:HUN:GerHunDict")
-    ("HU⇒DE" . "HUN:GER:GerHunDict")
-    ("FR⇒HU" . "FRA:HUN:FraHunDict")
-    ("HU⇒FR" . "HUN:FRA:FraHunDict")
-    ("IT⇒HU" . "ITA:HUN:ItaHunDict")
-    ("HU⇒IT" . "HUN:ITA:ItaHunDict")
-    ("NL⇒HU" . "HOL:HUN:HolHunDict")
-    ("HU⇒NL" . "HUN:HOL:HolHunDict")
-    ("PL⇒HU" . "POL:HUN:PolHunDict")
-    ("HU⇒PL" . "HUN:POL:PolHunDict"))
-  "List of dictionaries to can be used with SZTAKI.")
+  '(("EN:HU" . "ENG:HUN:EngHunDict")
+    ("HU:EN" . "HUN:ENG:EngHunDict")
+    ("DE:HU" . "GER:HUN:GerHunDict")
+    ("HU:DE" . "HUN:GER:GerHunDict")
+    ("FR:HU" . "FRA:HUN:FraHunDict")
+    ("HU:FR" . "HUN:FRA:FraHunDict")
+    ("IT:HU" . "ITA:HUN:ItaHunDict")
+    ("HU:IT" . "HUN:ITA:ItaHunDict")
+    ("NL:HU" . "HOL:HUN:HolHunDict")
+    ("HU:NL" . "HUN:HOL:HolHunDict")
+    ("PL:HU" . "POL:HUN:PolHunDict")
+    ("HU:PL" . "HUN:POL:PolHunDict"))
+  "List of dictionaries can be used with SZTAKI.")
 
 (defcustom sztaki-local-dictionary
   nil
