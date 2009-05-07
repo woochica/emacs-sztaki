@@ -24,10 +24,15 @@
     ("HU:PL" . "HUN:POL:PolHunDict"))
   "List of dictionaries can be used with SZTAKI.")
 
+(defgroup sztaki nil
+  "Customizations for webma-instance."
+  :group 'applications)
+
 (defcustom sztaki-local-dictionary
   nil
   "Dictionary name to be used for dictionary functions."
-  :type 'string)
+  :type 'string
+  :group 'sztaki)
 
 (defun sztaki-dictionary-code (dict)
   "Return SZTAKI URL code for dictionary name DICT."
