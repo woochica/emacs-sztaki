@@ -54,6 +54,10 @@
   "Return SZTAKI URL code for dictionary name DICT."
   (cdr (assoc dict sztaki-dictionary-alist)))
 
+(defun sztaki-dictionary-opposite (dict)
+  "Return opposite dictionary name for DICT."
+  (mapconcat 'identity (nreverse (split-string dict ":")) ":"))
+
 (defun sztaki-local-dictionary ()
   "Return currently used dictionary name."
   (or
@@ -70,22 +74,27 @@
         (sztaki-local-dictionary))))
   (setq sztaki-local-dictionary dict))
 
-(defun sztaki-lookup-phrase (phrase)
+(defun sztaki-lookup-phrase (phrase &optional reverse)
   "Look up the PHRASE and echo responsed translation if any.
 
-If called interactivly, look up word under the cursor."
+If called interactively, look up word under the cursor.
+If REVERSE is non-nil, use opposite dictionary."
   (interactive
-   (list (downcase (thing-at-point 'word))))
-  (let ((url (format sztaki-service-url-format
-                     (sztaki-dictionary-code (sztaki-local-dictionary))
-                     (w3m-url-encode-string phrase)))
-        (match (format "phrase '%s' not found" phrase)))
+   (list (downcase (thing-at-point 'word))
+	 current-prefix-arg))
+  (let* ((dict (if reverse
+		   (sztaki-dictionary-opposite (sztaki-local-dictionary))
+		 (sztaki-local-dictionary)))
+	 (url (format sztaki-service-url-format
+		      (sztaki-dictionary-code dict)
+		      (w3m-url-encode-string phrase)))
+	 (match (format "phrase '%s' not found" phrase)))
     (with-temp-buffer
       (w3m-process-with-wait-handler
         (w3m-retrieve-and-render url nil nil nil nil handler))
       (when (re-search-forward (concat phrase ":.*") nil t)
         (setq match (match-string-no-properties 0))))
-    (message "SZTAKI (%s): %s" (sztaki-local-dictionary) match)))
+    (message "SZTAKI (%s): %s" dict match)))
 
 (provide 'sztaki)
 
