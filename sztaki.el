@@ -19,7 +19,7 @@
 
 ;;; Code:
 
-;(require 'w3m)
+(require 'w3m)
 
 (defconst sztaki-service-url-format
   "http://szotar.sztaki.hu/dict_search.php?O=HUN&E=1&L=%s&in_emacs=1&W=%s"
