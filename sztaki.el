@@ -19,7 +19,7 @@
 
 ;;; Code:
 
-(require 'w3m)
+;(require 'w3m)
 
 (defconst sztaki-service-url-format
   "http://szotar.sztaki.hu/dict_search.php?O=HUN&E=1&L=%s&in_emacs=1&W=%s"
@@ -75,26 +75,45 @@
   (setq sztaki-local-dictionary dict))
 
 (defun sztaki-lookup-phrase (phrase &optional reverse)
-  "Look up the PHRASE and echo responsed translation if any.
+  "Look up the PHRASE and display responsed translation if any.
 
-If called interactively, look up word under the cursor.
-If REVERSE is non-nil, use opposite dictionary."
+If called interactively, use region or look up word under the
+cursor if region is inactive.
+
+If REVERSE is non-nil, use opposite dictionary.
+
+If there is an exact match for PHARSE, it will be displayed in
+the echo area, otherwise a buffer will be pop up that displays
+the translations. You can simply hit `q' to exit and return."
   (interactive
-   (list (downcase (thing-at-point 'word))
+   (list (downcase (if (region-active-p)
+                       (filter-buffer-substring (region-beginning) (region-end) nil t)
+                     (thing-at-point 'word)))
 	 current-prefix-arg))
   (let* ((dict (if reverse
 		   (sztaki-dictionary-opposite (sztaki-local-dictionary))
 		 (sztaki-local-dictionary)))
 	 (url (format sztaki-service-url-format
 		      (sztaki-dictionary-code dict)
-		      (w3m-url-encode-string phrase)))
-	 (match (format "phrase '%s' not found" phrase)))
-    (with-temp-buffer
-      (w3m-process-with-wait-handler
+                      (w3m-url-encode-string phrase nil t))))
+    (with-current-buffer (get-buffer-create "*sztaki*")
+      (if (w3m-process-with-wait-handler
         (w3m-retrieve-and-render url nil nil nil nil handler))
-      (when (re-search-forward (concat phrase ":.*") nil t)
-        (setq match (match-string-no-properties 0))))
-    (message "SZTAKI (%s): %s" dict match)))
+          (cond
+           ((re-search-forward (concat "^" phrase ":.*") nil t)
+            (message "SZTAKI (%s): %s" dict (match-string-no-properties 0)))
+           ((progn
+              (goto-char (point-min))
+              (re-search-forward "kifejezést találtam:" nil t))
+            (beginning-of-line)
+            (delete-region (point-min) (point))
+            (when (re-search-forward "^--" nil t)
+              (delete-region (match-beginning 0) (point-max)))
+            (goto-char (point-min))
+            (view-buffer "*sztaki*"))
+           (t
+            (message "phrase '%s' not found" phrase)))
+        (message "Failed to fetch page.")))))
 
 (provide 'sztaki)
 
