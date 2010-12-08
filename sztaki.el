@@ -41,7 +41,7 @@
   "List of dictionaries can be used with SZTAKI.")
 
 (defgroup sztaki nil
-  "Customizations for webma-instance."
+  "Customizations for `sztaki'."
   :group 'applications)
 
 (defcustom sztaki-local-dictionary
